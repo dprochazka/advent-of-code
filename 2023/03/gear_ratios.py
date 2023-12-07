@@ -1,13 +1,7 @@
 import itertools
-
+from helpers import is_digit, is_symbol
 
 def find_part_numbers(input):
-    def is_digit(char):
-        return char in "1234567890"
-
-    def is_symbol(char):
-        return char != "." and not is_digit(char)
-
     part_numbers = []
     for j, line in enumerate(input):
         number = ""
