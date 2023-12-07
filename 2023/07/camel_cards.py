@@ -5,7 +5,6 @@ COMBOS_VALUES = {
     "three-of-a-kind": 3 * 13**5,
     "two-pair": 2 * 13**5,
     "one-pair": 1 * 13**5,
-    "high-card": 0 * 13**5,
 }
 
 
@@ -25,26 +24,22 @@ def evaluate_hand(hand):
         (faces_val[char] * 13**power for power, char in enumerate(reversed(hand)))
     )
 
-    if len(set(hand)) == len(hand):
-        return COMBOS_VALUES["high-card"] + value
-    if len(set(hand)) == len(hand) - 1:
-        return COMBOS_VALUES["one-pair"] + value
-    if len(set(hand)) == 1:
+    face_counts = sorted([hand.count(ch) for ch in faces_val.keys()], reverse=True)
+
+    if face_counts[0] == 5:
         return COMBOS_VALUES["five-of-a-kind"] + value
-
-    face_counts = [hand.count(ch) for ch in faces_val.keys()]
-
-    if max(face_counts) == 4:
+    elif face_counts[0] == 4:
         return COMBOS_VALUES["four-of-a-kind"] + value
-
-    face_counts = sorted(face_counts, reverse=True)
-
     if face_counts[0] == 3 and face_counts[1] == 2:
         return COMBOS_VALUES["full-house"] + value
     elif face_counts[0] == 3:
         return COMBOS_VALUES["three-of-a-kind"] + value
-    else:
+    elif face_counts[0] == 2 and face_counts[1] == 2:
         return COMBOS_VALUES["two-pair"] + value
+    elif face_counts[0] == 2:
+        return COMBOS_VALUES["one-pair"] + value
+    else:
+        return value
 
 
 def evaluate_hand_part_two(hand):
