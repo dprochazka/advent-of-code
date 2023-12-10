@@ -1,4 +1,5 @@
-from pipe_maze import measure_maze
+import pytest
+from pipe_maze import measure_maze, measure_maze_inside, clean_maze, find_main_loop
 
 EXAMPLE = """..F7.
 .FJ|.
@@ -9,5 +10,54 @@ LJ...
 
 EXPECTED = 8
 
+
 def test_pipe_maze():
     assert measure_maze(EXAMPLE) == EXPECTED
+
+
+EXAMPLE_2 = """...........
+.S-------7.
+.|F-----7|.
+.||.....||.
+.||.....||.
+.|L-7.F-J|.
+.|..|.|..|.
+.L--J.L--J.
+...........
+""".splitlines()
+
+EXAMPLE_3 = """.F----7F7F7F7F-7....
+.|F--7||||||||FJ....
+.||.FJ||||||||L7....
+FJL7L7LJLJ||LJ.L-7..
+L--J.L7...LJS7F-7L7.
+....F-J..F7FJ|L7L7L7
+....L7.F7||L7|.L7L7|
+.....|FJLJ|FJ|F7|.LJ
+....FJL-7.||.||||...
+....L---J.LJ.LJLJ...
+""".splitlines()
+
+EXAMPLE_4 = """FF7FSF7F7F7F7F7F---7
+L|LJ||||||||||||F--J
+FL-7LJLJ||||||LJL-77
+F--JF--7||LJLJ7F7FJ-
+L---JF-JLJ.||-FJLJJ7
+|F|F-JF---7F7-L7L|7|
+|FFJF7L7F-JF7|JL---7
+7-L-JL7||F7|L7F-7F7|
+L.L7LFJ|||||FJL7||LJ
+L7JLJL-JLJLJL--JLJ.L
+""".splitlines()
+
+
+@pytest.mark.parametrize("maze, expected", [(EXAMPLE_2, 4), (EXAMPLE_3, 8)])
+def test_measure_clean_maze_inside(maze, expected):
+    assert measure_maze_inside(maze) == expected
+
+
+@pytest.mark.parametrize("maze, expected", [(EXAMPLE_2, 4), (EXAMPLE_4, 10)])
+def test_measure_dirty_maze_inside(maze, expected):
+    main_loop = find_main_loop(maze)
+    maze = clean_maze(maze, main_loop)
+    assert measure_maze_inside(maze) == expected
