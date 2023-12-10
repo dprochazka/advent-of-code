@@ -1,0 +1,7 @@
+{
+    "project_name": "task for elf",
+    "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_') }}",
+    "main_method": "{{ cookiecutter.project_slug }}",
+    "day": "00",
+    "env_user_cookie": "ADVENT_OF_CODE_SESSION"
+}
