@@ -38,20 +38,53 @@ def find_horizontal_mirrors(block):
             i2 += 1
 
 
-def find_mirrors(block):
-    s = 0
+def find_all_mirrors(block):
+    s = []
     for n in find_horizontal_mirrors(block):
-        s += 100 * n
+        s.append(100 * n)
     for n in find_horizontal_mirrors(transpose_block(block)):
-        s += n
+        s.append(n)
     return s
 
 
+def find_first_mirror(block, blacklist):
+    for n in find_horizontal_mirrors(block):
+        if n and 100 * n not in blacklist:
+            return 100 * n
+    for n in find_horizontal_mirrors(transpose_block(block)):
+        if n and n not in blacklist:
+            return n
+
+
 def solve_part_one(lines):
-    return sum([find_mirrors(b) for b in parse_text_blocks(lines)])
+    return sum([sum(find_all_mirrors(b)) for b in parse_text_blocks(lines)])
+
+
+def solve_part_two(lines):
+    blocks = parse_text_blocks(lines)
+    s = 0
+    for block in blocks:
+        orig_mirror = find_first_mirror(block, blacklist=[])
+        breakme = False
+        for i, row in enumerate(block):
+            for j, char in enumerate(row):
+                test_block = deepcopy(block)
+                char = "#" if char == "." else "."
+                test_block[i] = row[:j] + char + row[j + 1 :]
+                mirror = find_first_mirror(
+                    test_block, blacklist=[orig_mirror]
+                )  # has to be improved...
+                if mirror and mirror != orig_mirror:
+                    s += mirror
+                    breakme = True
+                    break
+            if breakme:
+                break
+    return s
 
 
 if __name__ == "__main__":
     with open("input.txt") as input_file:
         lines = [line.rstrip() for line in input_file]
     print(solve_part_one(lines))
+    print(solve_part_two(lines))
