@@ -11,10 +11,35 @@ def hash_sequence(string):
     return hashed
 
 
+def part_one(steps):
+    return sum((hash_sequence(s) for s in steps))
+
+
+def part_two(steps):
+    hashmap = [{} for _ in range(BINS)]
+
+    for s in steps:
+        if "-" in s:
+            label = s[:-1]
+            i = hash_sequence(label)
+            if label in hashmap[i]:
+                del hashmap[i][label]
+        elif "=" in s:
+            label, focal = s.split("=")
+            i = hash_sequence(label)
+            hashmap[i][label] = int(focal)
+
+    return sum(
+        (
+            i * n * f
+            for i, box in enumerate(hashmap, start=1)
+            for n, f in enumerate(box.values(), start=1)
+        )
+    )
+
+
 if __name__ == "__main__":
     with open("input.txt") as input_file:
         steps = input_file.readline()[:-1].split(",")
-    total = 0
-    for s in steps:
-        total += hash_sequence(s)
-    print(total)
+    print(part_one(steps))
+    print(part_two(steps))
