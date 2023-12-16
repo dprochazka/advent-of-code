@@ -1,4 +1,5 @@
 from enum import Enum
+from functools import cache
 
 
 class Direction(Enum):
@@ -8,15 +9,17 @@ class Direction(Enum):
     E = (0, 1)
 
 
-def count_energized(field):
+def count_energized(field, start):
     M = len(field)
     N = len(field[0])
-    beams = [(0, 0, Direction.E)]
+    beams = [start]
     history = set(beams)
 
+    @cache
     def is_outside(i, j, d):
         return i < 0 or i >= M or j < 0 or j >= N
 
+    @cache
     def advance(i, j, d):
         i += d.value[0]
         j += d.value[1]
@@ -71,7 +74,23 @@ def count_energized(field):
     return len(energized)
 
 
+def part_one(field):
+    return count_energized(field, (0, 0, Direction.E))
+
+
+def part_two(field):
+    M = len(field)
+    N = len(field[0])
+    top = [(0, i, Direction.S) for i in range(N)]
+    bottom = [(M - 1, i, Direction.N) for i in range(N)]
+    left = [(i, 0, Direction.E) for i in range(M)]
+    right = [(i, N - 1, Direction.W) for i in range(M)]
+
+    return max(count_energized(field, s) for s in top + bottom + left + right)
+
+
 if __name__ == "__main__":
     with open("input.txt") as input_file:
         lines = [line.rstrip() for line in input_file]
-    print(count_energized(lines))
+    print(part_one(lines))
+    print(part_two(lines))
