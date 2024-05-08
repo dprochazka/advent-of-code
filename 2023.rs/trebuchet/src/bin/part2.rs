@@ -1,10 +1,10 @@
 fn main() {
     let input = include_str!("./input.txt");
-    let output = part1(input);
+    let output = part2(input);
     dbg!(output);
 }
 
-fn part1(input: &str) -> String {
+fn part2(input: &str) -> String {
     let output = input
         .lines()
         .map(process_line)
