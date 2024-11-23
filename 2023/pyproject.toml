@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "advent of code 2023"
+version = "0.1.0"
+description = "my advent of code solutions for 2023"
+authors = ["dprochazka"]
+license = "MIT"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+numpy = "1.26.2"
+cookiecutter = "2.5.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "7.4.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

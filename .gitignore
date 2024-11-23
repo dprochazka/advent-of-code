@@ -157,3 +157,4 @@ cython_debug/
 
 # Advent of Code stuff
 input.txt
+example.txt
