@@ -9,7 +9,7 @@ def is_safe(report):
     for a, b in itertools.pairwise(report):
         if not 1 <= abs(a - b) <= 3:
             return False
-        if (inc and a > b) or (not inc and a < b):
+        if (a < b) is not inc:
             return False
     return True
 
